@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import mongoose from "mongoose"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import authRoute from "./routes/authentication.js"
 const app =express()
 dotenv.config()
 const connect =async() =>{
@@ -35,7 +36,7 @@ const connect =async() =>{
     app.use(express.json())
     ////////////////////////
     app.use(cookieParser())
-    //app.use("/api/auth",authRoute)
+    app.use("/api/auth",authRoute)
    
     app.use((err,req,res,next)=>{
       const errStatus=err.status || 500

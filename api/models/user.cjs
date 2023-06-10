@@ -60,3 +60,4 @@ module.exports = {
   User,
   Admin,
 };
+//export default User;
