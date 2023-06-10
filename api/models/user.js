@@ -1,5 +1,6 @@
 // Import required packages
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Define the schema for regular users
 const userSchema = new mongoose.Schema({
@@ -51,13 +52,14 @@ const adminSchema = new mongoose.Schema({
 });
 
 // Define the user model
-const User = mongoose.model('User', userSchema);
-
+//const User = mongoose.model('User', userSchema);
+export const User = mongoose.model('User', userSchema);
+export const Admin = mongoose.model('Admin', adminSchema);
 // Define the admin model
-const Admin = mongoose.model('Admin', adminSchema);
+// const Admin = mongoose.model('Admin', adminSchema);
 
-module.exports = {
-  User,
-  Admin,
-};
+// module.exports = {
+//   User,
+//   Admin,
+// };
 //export default User;
