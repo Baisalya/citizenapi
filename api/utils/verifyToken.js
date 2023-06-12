@@ -1,31 +1,41 @@
 import jwt from 'jsonwebtoken';
 import { createError } from './error.js';
+import { User, Admin } from '../models/user.js';
 
-export const verifyToken = (req, res, next) => {
+export const verifyUser = async (req, res, next) => {
   const token = req.cookies.access_token;
   if (!token) {
     return next(createError(401, 'You are not authenticated!'));
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return next(createError(403, 'Token is not valid!'));
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return next(createError(401, 'User not found'));
+    }
     req.user = user;
     next();
-  });
+  } catch (error) {
+    next(createError(403, 'Token is not valid!'));
+  }
 };
 
-export const verifyUser = (req, res, next) => {
-  const { role } = req.user;
-  if (role !== 'user') {
-    return next(createError(403, 'You do not have permission to access this route!'));
+export const verifyAdmin = async (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return next(createError(401, 'You are not authenticated!'));
   }
-  next();
-};
 
-export const verifyAdmin = (req, res, next) => {
-  const { role } = req.user;
-  if (role !== 'admin') {
-    return next(createError(403, 'You do not have permission to access this route!'));
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const admin = await Admin.findById(decoded.adminId);
+    if (!admin) {
+      return next(createError(401, 'Admin not found'));
+    }
+    req.admin = admin;
+    next();
+  } catch (error) {
+    next(createError(403, 'Token is not valid!'));
   }
-  next();
 };

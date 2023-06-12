@@ -4,6 +4,7 @@ import mongoose from "mongoose"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import authRoute from "./routes/authentication.js"
+import userRoutes from './routes/user.js';
 const app =express()
 dotenv.config()
 const connect =async() =>{
@@ -37,7 +38,7 @@ const connect =async() =>{
     ////////////////////////
     app.use(cookieParser())
     app.use("/api/auth",authRoute)
-   
+    app.use('/api/user', userRoutes);
     app.use((err,req,res,next)=>{
       const errStatus=err.status || 500
       const errMessage=err.message || "Somthing went wrong!!"
