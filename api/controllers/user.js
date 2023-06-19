@@ -3,12 +3,13 @@ import { User } from '../models/user.js';
 // Get all users
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select('-password');
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
+
 
 // Get a specific user
 export const getUser = async (req, res) => {
