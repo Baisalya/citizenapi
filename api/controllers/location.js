@@ -25,20 +25,28 @@ export const createLocation = async (req, res) => {
     res.status(500).json({ error: 'Failed to create location' });
   }
 };
-
-
-// Get all locations for a user
+//
 export const getUserLocations = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId).populate('locations');
+    const userId = req.params.userId; // Assuming the userId is provided in the request parameters
+    const user = await User.findById(userId).populate('locations');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json(user.locations);
+
+    const locations = user.locations.map(location => ({
+      ...location._doc,
+      createdAt: location.createdAt.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })    }));
+
+    res.status(200).json(locations);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch user locations' });
+    res.status(500).json({ error: 'Failed to get user locations' });
   }
 };
+
+
+// Get all locations for a user
+
 
 // Delete a location for a user
 export const deleteLocation = async (req, res) => {
