@@ -1,7 +1,8 @@
 // Import required packages
 //const mongoose = require('mongoose');
 import mongoose from 'mongoose';
-
+import { Location } from './location.js';
+import { Photo } from './location.js';
 // Define the schema for regular users
 const userSchema = new mongoose.Schema({
   username: {
@@ -45,6 +46,14 @@ const adminSchema = new mongoose.Schema({
     enum: ['admin'],
     default: 'admin',
   },
+  locations: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+  }],
+  photos: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Photo',
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
