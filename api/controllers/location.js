@@ -11,7 +11,8 @@ export const createLocation = async (req, res) => {
     const location = new Location({ longitude, latitude });
     await location.save();
 
-    const user = await User.findById(req.params.userId);
+    const userId = req.params.userId; // Assuming the userId is provided in the request parameters
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -24,6 +25,7 @@ export const createLocation = async (req, res) => {
     res.status(500).json({ error: 'Failed to create location' });
   }
 };
+
 
 // Get all locations for a user
 export const getUserLocations = async (req, res) => {

@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  locations: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+  }],
+  photos: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Photo',
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
