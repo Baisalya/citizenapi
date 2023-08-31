@@ -7,12 +7,18 @@ import { User } from '../models/user.js';
 // Register a new user
 export const registerUser = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email,phoneNo, password } = req.body;
 
-    // Check if the username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-    if (existingUser) {
-      return res.status(409).json({ message: 'Username  or email already exists' });
+    // Check if the username already exists
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(409).json({ message: 'Username already exists' });
+    }
+
+    // Check if the email already exists
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(409).json({ message: 'Email already exists' });
     }
 
     // Hash the password
@@ -22,9 +28,10 @@ export const registerUser = async (req, res, next) => {
     const newUser = new User({
       username,
       email,
+      phoneNo,
       password: hashedPassword,
     });
-
+    console.log('Received login request:', email);
     // Save the user to the database
     await newUser.save();
 
@@ -33,6 +40,7 @@ export const registerUser = async (req, res, next) => {
     next(err);
   }
 };
+
 
 // Login user
 export const loginUser = async (req, res, next) => {
